@@ -2,15 +2,15 @@
 const word = "дифференциал";
 const letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 const sectors = [
-    { color: "#f1c40f", text: "100", value: 100, sound: null },
-    { color: "#e67e22", text: "200", value: 200, sound: null },
-    { color: "#e74c3c", text: "300", value: 300, sound: null },
-    { color: "#9b59b6", text: "400", value: 400, sound: null },
-    { color: "#3498db", text: "500", value: 500, sound: null },
-    { color: "#1abc9c", text: "Приз", value: "prize", sound: "prizeSound" },
-    { color: "#2ecc71", text: "x2", value: "x2", sound: "x2Sound" },
-    { color: "#34495e", text: "Банкрот", value: "bankrupt", sound: "bankruptSound" },
-    { color: "#7f8c8d", text: "Пропуск", value: "skip", sound: null }
+    { color: "#f1c40f", text: "100", value: 100 },
+    { color: "#e67e22", text: "200", value: 200 },
+    { color: "#e74c3c", text: "300", value: 300 },
+    { color: "#9b59b6", text: "400", value: 400 },
+    { color: "#3498db", text: "500", value: 500 },
+    { color: "#1abc9c", text: "Приз", value: "prize" },
+    { color: "#2ecc71", text: "x2", value: "x2" },
+    { color: "#34495e", text: "Банкрот", value: "bankrupt" },
+    { color: "#7f8c8d", text: "Пропуск", value: "skip" }
 ];
 
 // Состояние игры
@@ -150,15 +150,22 @@ function spinWheel() {
     const spinDuration = 5000;
     const startTime = Date.now();
     
+    // Угол для точного позиционирования под стрелкой
+    const sectorCenterAngle = (360 / sectors.length) * sectorIndex;
+    // Коррекция положения (стрелка вверху, первый сектор справа)
+    const correctionAngle = 90;
+    // 5 полных оборотов + точное положение
+    const targetAngle = 5 * 360 + sectorCenterAngle + correctionAngle;
+    
     const animateWheel = () => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / spinDuration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        const rotations = 10;
-        const angle = easeOut * rotations * 360 + (sectorIndex * (360 / sectors.length));
-        const correctedAngle = angle - 90;
         
-        elements.wheel.style.transform = `rotate(-${correctedAngle}deg)`;
+        // Плавное замедление
+        const easeOut = 1 - Math.pow(1 - progress, 4);
+        const currentAngle = easeOut * targetAngle;
+        
+        elements.wheel.style.transform = `rotate(-${currentAngle}deg)`;
         
         if (progress < 1) {
             requestAnimationFrame(animateWheel);
@@ -168,10 +175,15 @@ function spinWheel() {
     };
     
     const finishSpin = (index) => {
+        // Точная фиксация конечного положения
+        const finalAngle = (360 / sectors.length * index) + 90;
+        elements.wheel.style.transform = `rotate(-${finalAngle}deg)`;
+        
         gameState.isSpinning = false;
         gameState.currentSector = sectors[index];
         gameState.canGuess = true;
         
+        // Подсветка
         const paths = elements.wheel.querySelectorAll('path');
         paths[index].classList.add('highlight');
         
