@@ -22,7 +22,8 @@ let gameState = {
     multiplier: 1,
     isSpinning: false,
     canGuess: false,
-    currentSector: null
+    currentSector: null,
+    currentHighlight: null
 };
 
 // Элементы DOM
@@ -54,7 +55,8 @@ function initGame() {
         multiplier: 1,
         isSpinning: false,
         canGuess: false,
-        currentSector: null
+        currentSector: null,
+        currentHighlight: null
     };
     
     createWheel();
@@ -146,22 +148,23 @@ function spinWheel() {
     updateStatus("Барабан крутится...");
     playSound('spin');
     
+    // Удаляем предыдущую подсветку
+    if (gameState.currentHighlight) {
+        gameState.currentHighlight.classList.remove('highlight');
+    }
+    
     const sectorIndex = Math.floor(Math.random() * sectors.length);
     const spinDuration = 5000;
     const startTime = Date.now();
     
-    // Угол для точного позиционирования под стрелкой
     const sectorCenterAngle = (360 / sectors.length) * sectorIndex;
-    // Коррекция положения (стрелка вверху, первый сектор справа)
     const correctionAngle = 90;
-    // 5 полных оборотов + точное положение
     const targetAngle = 5 * 360 + sectorCenterAngle + correctionAngle;
     
     const animateWheel = () => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / spinDuration, 1);
         
-        // Плавное замедление
         const easeOut = 1 - Math.pow(1 - progress, 4);
         const currentAngle = easeOut * targetAngle;
         
@@ -175,7 +178,6 @@ function spinWheel() {
     };
     
     const finishSpin = (index) => {
-        // Точная фиксация конечного положения
         const finalAngle = (360 / sectors.length * index) + 90;
         elements.wheel.style.transform = `rotate(-${finalAngle}deg)`;
         
@@ -183,13 +185,10 @@ function spinWheel() {
         gameState.currentSector = sectors[index];
         gameState.canGuess = true;
         
-        // Подсветка
+        // Постоянная подсветка выпавшего сектора
         const paths = elements.wheel.querySelectorAll('path');
         paths[index].classList.add('highlight');
-        
-        setTimeout(() => {
-            paths[index].classList.remove('highlight');
-        }, 2000);
+        gameState.currentHighlight = paths[index];
         
         applySectorEffect(gameState.currentSector);
         updateStatus(`Выпало: ${gameState.currentSector.text}. Выбирайте букву!`);
