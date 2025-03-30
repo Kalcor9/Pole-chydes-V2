@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поле Чудес</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="game-panel">
+            <h1>Поле Чудес</h1>
+            <div class="word-display" id="wordDisplay"></div>
+            <div class="status" id="status">Крутите барабан!</div>
+            <div class="keyboard" id="keyboard"></div>
+            <button class="restart-btn" id="restartBtn">Новая игра</button>
+        </div>
+        
+        <div class="wheel-panel">
+            <div class="wheel-container">
+                <svg id="wheel" viewBox="0 0 300 300"></svg>
+                <div class="pointer"></div>
+            </div>
+            <div class="sector-info" id="sectorInfo"></div>
+        </div>
+    </div>
+
+    <!-- Звуковые эффекты -->
+    <audio id="spinSound" src="sounds/spin.mp3" preload="auto"></audio>
+    <audio id="correctSound" src="sounds/correct.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="sounds/wrong.mp3" preload="auto"></audio>
+    <audio id="winSound" src="sounds/win.mp3" preload="auto"></audio>
+    <audio id="loseSound" src="sounds/lose.mp3" preload="auto"></audio>
+    <audio id="bankruptSound" src="sounds/bankrupt.mp3" preload="auto"></audio>
+    <audio id="x2Sound" src="sounds/x2.mp3" preload="auto"></audio>
+    <audio id="prizeSound" src="sounds/prize.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
