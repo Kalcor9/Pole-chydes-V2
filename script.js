@@ -1,5 +1,5 @@
 // Конфигурация игры
-const word = "кристаллография";
+const word = "тригонометрия";
 const letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 const sectors = [
     { color: "#f1c40f", text: "100", value: 100 },
