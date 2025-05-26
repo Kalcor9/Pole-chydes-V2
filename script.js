@@ -1,5 +1,5 @@
 // Конфигурация игры
-const word = "кондитерская";
+const word = "безопасность";
 const letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 const sectors = [
     { color: "#f1c40f", text: "100", value: 100 },
